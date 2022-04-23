@@ -13,11 +13,20 @@
 
     <ul>
         <% for (todo of todos) { %>
-            <li>
-                <%= todo.text %>
+            <li class="<%= todo.completed ? 'done': null %>">
+                Todo: <%= todo.text %> <br>
+                <form action="/todo/<%= todo._id %>?_method=PUT" method="post">
+                Completed: <%= todo.completed %>
+                    <input type="submit" value="task completed" <%= todo.completed ? 'disabled': null %>>
+                </form>
             </li>
        <% } %>
     </ul>
+    <form action="/todo" method="post">
+        <input type="text" name="text" placeholder="todo goes here">
+        <input type="submit" value="Save todo">
+
+    </form>
     
 </body>
 </html>

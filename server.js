@@ -1,3 +1,11 @@
+//main things i learned from this exercise
+//1 using npm run dev instead of npm, look in package.json for that
+//"dev" : "nodemon server.js" use `npm run dev` to run this
+//why? because the "start" command is what heroku is going to use, you dont want nodemon in there
+//2. using .save() 
+// look in app.put("/todo/:id", async (req,res) => { for the .save()
+
+
 //dependos
 require("dotenv").config() //this loads the .env environment variables, should be first!
 const express = require('express')
@@ -55,6 +63,22 @@ app.get("/todo/seed", async (req,res) => {
     ]).catch((err) => res.send(err))
     //send todos as json
     res.json(todos)
+})
+
+app.post("/todo", async (req,res) => {
+    await Todo.create(req.body).catch((err) => res.send(err))
+    res.redirect("/")
+})
+
+app.put("/todo/:id", async (req,res) => {
+    //get id
+    let id = req.params.id
+    //get todos
+    const todo = await Todo.findById(id)
+    //complete todo
+    todo.completed = true
+    await todo.save() //saves changes
+    res.redirect("/")
 })
 
 app.listen(process.env.PORT, () => {
