@@ -4,6 +4,7 @@
 //why? because the "start" command is what heroku is going to use, you dont want nodemon in there
 //2. using .save() 
 // look in app.put("/todo/:id", async (req,res) => { for the .save()
+//3. in create, he passes an array of three objects that fit schema at the same time
 
 
 //dependos
