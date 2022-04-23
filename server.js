@@ -20,7 +20,14 @@ cxn
 .on("error", (err) => (console.log(err)))
 
 //schemas models
+//schema - definition of our data type
+const todoSchema = new mongoose.Schema({
+    text: String,
+    completed: Boolean
+}, {timestamps: true})
 
+//model - the object for workign with our data type
+const Todo = mongoose.model("Todo", todoSchema)
 
 //create express application
 const app = express()
@@ -32,8 +39,22 @@ app.use(express.urlencoded({extended: true})) //this parses html form bodies if 
 app.use("/static", express.static("static")) // "/static" is the url destination, "static" is reference in your dir structure
 
 //routes
-app.get("/", (req,res) => {
-    res.send("something")
+app.get("/",  async (req,res) => {
+    //get todos
+    const todos = await Todo.find({}).catch((err) => res.send(err))
+    // render index 
+    res.render("index.ejs", {todos})
+})
+
+app.get("/todo/seed", async (req,res) => {
+    await Todo.remove({})
+    const todos = await Todo.create([
+        {text: "blah",completed: false},
+        {text: "blah2",completed: false},
+        {text: "blah3",completed: true}
+    ]).catch((err) => res.send(err))
+    //send todos as json
+    res.json(todos)
 })
 
 app.listen(process.env.PORT, () => {
