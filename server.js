@@ -23,10 +23,19 @@ cxn
 
 
 //create express application
-const app = exoress()
+const app = express()
 
 //middleware - app.use(whateverTheMiddleWareFunctionIs)
+app.use(methodOverride("_method")) //the string "_method" is defined by you, its what you use in the url
 app.use(morgan("tiny")) //every request that comes into the server, were going to log it first
 app.use(express.urlencoded({extended: true})) //this parses html form bodies if you enter a form, this is where req.body comes from
 app.use("/static", express.static("static")) // "/static" is the url destination, "static" is reference in your dir structure
-app.use(methodOverride("_method")) //the string "_method" is defined by you, its what you use in the url
+
+//routes
+app.get("/", (req,res) => {
+    res.send("something")
+})
+
+app.listen(process.env.PORT, () => {
+    console.log(`we in this ${process.env.PORT}`)
+})
